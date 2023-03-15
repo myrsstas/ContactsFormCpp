@@ -72,7 +72,6 @@ namespace DataFormProject {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-
 			this->splitContainer = (gcnew System::Windows::Forms::SplitContainer());
 			this->startFromZeroButton = (gcnew System::Windows::Forms::Button());
 			this->startLabel = (gcnew System::Windows::Forms::Label());
@@ -173,7 +172,7 @@ namespace DataFormProject {
 			this->ClientSize = System::Drawing::Size(426, 351);
 			this->Controls->Add(this->splitContainer);
 			this->Name = L"StartPage";
-			this->Text = L"StartPage";
+			this->Text = L"Start Page";
 			this->splitContainer->Panel1->ResumeLayout(false);
 			this->splitContainer->Panel1->PerformLayout();
 			this->splitContainer->Panel2->ResumeLayout(false);
@@ -197,7 +196,7 @@ namespace DataFormProject {
 			connectionDB->Close();
 
 		} catch (Exception^ ex){
-			MessageBox::Show(ex->Message);
+			MessageBox::Show(ex->Message, L"Start Page", MessageBoxButtons::OK, MessageBoxIcon::Information);
 
 		}
 

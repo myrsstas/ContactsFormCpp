@@ -114,7 +114,7 @@ namespace DataFormProject {
 			this->Controls->Add(this->addContactButton);
 			this->Controls->Add(this->contactsDataGridView);
 			this->Name = L"ContactListForm";
-			this->Text = L"ContactListForm";
+			this->Text = L"Contact List";
 			this->Load += gcnew System::EventHandler(this, &ContactListForm::ContactListForm_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->contactsDataGridView))->EndInit();
 			this->ResumeLayout(false);
@@ -152,7 +152,7 @@ namespace DataFormProject {
 
         }
         catch (Exception^ ex) {
-            MessageBox::Show(ex->Message);
+            MessageBox::Show(ex->Message,L"Contact List", MessageBoxButtons::OK , MessageBoxIcon::Information);
 
         }
 	}
