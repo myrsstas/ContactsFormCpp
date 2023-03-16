@@ -155,6 +155,12 @@ namespace DataFormProject {
             MessageBox::Show(ex->Message,L"Contact List", MessageBoxButtons::OK , MessageBoxIcon::Information);
 
         }
+
 	}
+
+	public: System::Void ContactListForm_ReloadDataGridView() {
+
+	}
+
 	};
 }

@@ -252,7 +252,6 @@ namespace DataFormProject {
 			this->dateOfBirthTB->Size = System::Drawing::Size(212, 20);
 			this->dateOfBirthTB->TabIndex = 7;
 			this->dateOfBirthTB->Value = System::DateTime(2023, 2, 26, 1, 27, 18, 0);
-			this->dateOfBirthTB->ValueChanged += gcnew System::EventHandler(this, &AddContactForm::dateOfBirthTB_ValueChanged);
 			// 
 			// label9
 			// 
@@ -304,10 +303,12 @@ namespace DataFormProject {
 #pragma endregion
 
     private: System::Void backToListButton_Click(System::Object^ sender, System::EventArgs^ e) {
-        this->Hide();
-        form2->Show();
-        
 		//TODO: reset all fields
+		ClearAllFields();
+
+		this->Hide();
+		
+		form2->Show();
 
     }
     private: System::Void nextEntryButton_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -327,7 +328,7 @@ namespace DataFormProject {
 		
 		nameTB->Text !="" ? name = nameTB->Text : name = "-";
 		surnameTB->Text != "" ? surname = surnameTB->Text : "-";
-		dateOfBirthTB->Text != today ? dateOfBirth = dateOfBirthTB->ToString() : dateOfBirth = "-";
+		dateOfBirthTB->Text != today ? dateOfBirth = dateOfBirthTB->Text : dateOfBirth = "-";
 		phoneTB->Text != "" ? phoneNumber = phoneTB->Text : phoneNumber = "-";
 		emailTB->Text != "" ? email = emailTB->Text : email = "-";
 		addressTB->Text != "" ? address = addressTB->Text : address = "-";
@@ -343,26 +344,20 @@ namespace DataFormProject {
         MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 
 		try{
-        
-        MySqlCommand^ sqlCommand = gcnew MySqlCommand("insert into contacts (name, surname, date_of_birth, phone_number, email, address, city, notes) values  ;", connectionDB);
+         //TODO: apothikeysi olwn twn stoixeiwn stin basi
+			MySqlCommand^ sqlCommand = gcnew MySqlCommand("insert into contacts (name, surname, date_of_birth, phone_number, email, address, city, notes) " +
+				" values('"+ name +"' , '" + surname + "','" + dateOfBirth + "','" + phoneNumber + "','" + email + "','" + address + "','" + city + "','" + notes + "'); ", connectionDB);
+			connectionDB->Open();
+			sqlCommand->ExecuteNonQuery();
+			connectionDB->Close();
 		}
 		catch (Exception^ ex) {
-
+			MessageBox::Show(ex->Message, L"Inserting Data", MessageBoxButtons::OK, MessageBoxIcon::Information);
 		}
-        //INSERT INTO `contacts` (`ID`, `name`, `surname`, `date_of_birth`, `phone_number`, `email`, `address`, `city`, `notes`) VALUES (NULL, 'fggfdfgdfdgfgd', 'fgdfgdfdgfgd', '2023-01-11', '6979282546', 'fdgfdgfgd', 'gfdgfdgfd', 'gfddfggdf', '');
-
-       //TODO: apothikeysi olwn twn stoixeiwn stin basi
-     
-
+        
         //TODO: clear ola ta pedia
-        /*nameTB->Text = "";
-        surnameTB->Text = "";
-        dateOfBirthTB->ResetText();
-        phoneTB->Text = "";
-        emailTB->Text = "";
-        addressTB->Text = "";
-        cityTB->Text = "";
-        notesTB->Text = "";*/
+		ClearAllFields();
+        
 
     }
     private: System::Void nameTB_Leave(System::Object^ sender, System::EventArgs^ e) {
@@ -424,14 +419,21 @@ namespace DataFormProject {
     }
 
 	private: System::Void AddContactForm_Load(System::Object^ sender, System::EventArgs^ e) {
-		//dateOfBirthTB->Format = DateTimePickerFormat::Short;
 		dateOfBirthTB->MaxDate = DateTime::Today;
 		dateOfBirthTB->Value = DateTime::Today;
 	}
 
-
-	private: System::Void dateOfBirthTB_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
-
+	private: System::Void ClearAllFields() {
+		nameTB->Text = "";
+		surnameTB->Text = "";
+		dateOfBirthTB->Value = DateTime::Today;
+		phoneTB->Text = "";
+		emailTB->Text = "";
+		addressTB->Text = "";
+		cityTB->Text = "";
+		notesTB->Text = "";
 	}
+
+
 };
 }
