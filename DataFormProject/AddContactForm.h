@@ -244,12 +244,15 @@ namespace DataFormProject {
 			// 
 			// dateOfBirthTB
 			// 
+			this->dateOfBirthTB->CustomFormat = L"yyyy-MM-dd";
 			this->dateOfBirthTB->DropDownAlign = System::Windows::Forms::LeftRightAlignment::Right;
+			this->dateOfBirthTB->Format = System::Windows::Forms::DateTimePickerFormat::Custom;
 			this->dateOfBirthTB->Location = System::Drawing::Point(120, 167);
 			this->dateOfBirthTB->Name = L"dateOfBirthTB";
 			this->dateOfBirthTB->Size = System::Drawing::Size(212, 20);
 			this->dateOfBirthTB->TabIndex = 7;
 			this->dateOfBirthTB->Value = System::DateTime(2023, 2, 26, 1, 27, 18, 0);
+			this->dateOfBirthTB->ValueChanged += gcnew System::EventHandler(this, &AddContactForm::dateOfBirthTB_ValueChanged);
 			// 
 			// label9
 			// 
@@ -303,7 +306,9 @@ namespace DataFormProject {
     private: System::Void backToListButton_Click(System::Object^ sender, System::EventArgs^ e) {
         this->Hide();
         form2->Show();
-        /*obj ->Show();*/
+        
+		//TODO: reset all fields
+
     }
     private: System::Void nextEntryButton_Click(System::Object^ sender, System::EventArgs^ e) {
         //TODO: save all variables
@@ -311,7 +316,7 @@ namespace DataFormProject {
 		String^ name = nullptr;
 		String^ surname = nullptr;
 
-		DateTime today = DateTime::Today ;
+		String^ today = DateTime::Today.Date.ToString("yyyy-MM-dd");
 		String^ dateOfBirth = nullptr;
 
 		String^ phoneNumber = nullptr;
@@ -322,7 +327,7 @@ namespace DataFormProject {
 		
 		nameTB->Text !="" ? name = nameTB->Text : name = "-";
 		surnameTB->Text != "" ? surname = surnameTB->Text : "-";
-		dateOfBirthTB->Text != today.ToString() ? dateOfBirth = dateOfBirthTB->ToString() : dateOfBirth = "-";
+		dateOfBirthTB->Text != today ? dateOfBirth = dateOfBirthTB->ToString() : dateOfBirth = "-";
 		phoneTB->Text != "" ? phoneNumber = phoneTB->Text : phoneNumber = "-";
 		emailTB->Text != "" ? email = emailTB->Text : email = "-";
 		addressTB->Text != "" ? address = addressTB->Text : address = "-";
@@ -330,20 +335,20 @@ namespace DataFormProject {
 		notesTB->Text != "" ? notes = notesTB->Text :notes = "-";
 
 		//MessageBox::Show(name + " " + surname + " " + dateOfBirth + " " + phoneNumber + " " + email + " " + address + " " + city + " " + notes);
-		MessageBox::Show(dateOfBirth);
+		//MessageBox::Show(dateOfBirthTB->Text + "\n" + dateOfBirth + "\n" + today);
 
 
-		////TODO: sqlite connection
-		//String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form";
-  //      MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
+		//TODO: sqlite connection
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form";
+        MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 
-		//try{
-  //      
-  //      MySqlCommand^ sqlCommand = gcnew MySqlCommand("insert into contacts values ;", connectionDB);
-		//}
-		//catch (Exception^ ex) {
+		try{
+        
+        MySqlCommand^ sqlCommand = gcnew MySqlCommand("insert into contacts (name, surname, date_of_birth, phone_number, email, address, city, notes) values  ;", connectionDB);
+		}
+		catch (Exception^ ex) {
 
-		//}
+		}
         //INSERT INTO `contacts` (`ID`, `name`, `surname`, `date_of_birth`, `phone_number`, `email`, `address`, `city`, `notes`) VALUES (NULL, 'fggfdfgdfdgfgd', 'fgdfgdfdgfgd', '2023-01-11', '6979282546', 'fdgfdgfgd', 'gfdgfdgfd', 'gfddfggdf', '');
 
        //TODO: apothikeysi olwn twn stoixeiwn stin basi
@@ -418,14 +423,15 @@ namespace DataFormProject {
         }
     }
 
-
-
 	private: System::Void AddContactForm_Load(System::Object^ sender, System::EventArgs^ e) {
-		dateOfBirthTB->CustomFormat = "yyyy/MM/dd";
-		dateOfBirthTB->Format = DateTimePickerFormat::Custom;
+		//dateOfBirthTB->Format = DateTimePickerFormat::Short;
+		dateOfBirthTB->MaxDate = DateTime::Today;
 		dateOfBirthTB->Value = DateTime::Today;
 	}
-private: System::Void dateOfBirthTB_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
-}
+
+
+	private: System::Void dateOfBirthTB_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+
+	}
 };
 }
