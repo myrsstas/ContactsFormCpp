@@ -18,6 +18,8 @@ namespace DataFormProject {
 	public:
 
 		System::Windows::Forms::Form^ form1;
+
+	public:
 		System::Windows::Forms::Form^ form3;
 
 		ContactListForm(void)
@@ -26,6 +28,8 @@ namespace DataFormProject {
 			//
 			//TODO: Add the constructor code here
 			//
+
+
 		}
 
 	protected:
@@ -67,8 +71,10 @@ namespace DataFormProject {
 			// 
 			// contactsDataGridView
 			// 
-			this->contactsDataGridView->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::Fill;
-			this->contactsDataGridView->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->contactsDataGridView->AllowUserToAddRows = false;
+			this->contactsDataGridView->AllowUserToDeleteRows = false;
+			this->contactsDataGridView->AllowUserToOrderColumns = true;
+			this->contactsDataGridView->AutoSizeColumnsMode = System::Windows::Forms::DataGridViewAutoSizeColumnsMode::AllCells;
 			this->contactsDataGridView->Location = System::Drawing::Point(12, 45);
 			this->contactsDataGridView->Name = L"contactsDataGridView";
 			this->contactsDataGridView->ReadOnly = true;
@@ -115,7 +121,7 @@ namespace DataFormProject {
 			this->Controls->Add(this->contactsDataGridView);
 			this->Name = L"ContactListForm";
 			this->Text = L"Contact List";
-			this->Load += gcnew System::EventHandler(this, &ContactListForm::ContactListForm_Load);
+			this->VisibleChanged += gcnew System::EventHandler(this, &ContactListForm::ContactListForm_VisibleChanged);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->contactsDataGridView))->EndInit();
 			this->ResumeLayout(false);
 
@@ -133,16 +139,16 @@ namespace DataFormProject {
 
     }
 
-	private: System::Void ContactListForm_Load(System::Object^ sender, System::EventArgs^ e) {
 
-        String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form";
-        MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
-        MySqlCommand^ sqlCommand = gcnew MySqlCommand("select * from contacts;", connectionDB);
+	private: System::Void ContactListForm_VisibleChanged(System::Object^ sender, System::EventArgs^ e) {
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form;";
+		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
+		MySqlCommand^ sqlCommand = gcnew MySqlCommand("select * from contacts;", connectionDB);
 		MySqlDataReader^ dataReader;
 		DataTable^ sqlDataTable = gcnew DataTable();
 
-        try {
-            connectionDB->Open();
+		try {
+			connectionDB->Open();
 			dataReader = sqlCommand->ExecuteReader();
 			sqlDataTable->Load(dataReader);
 			dataReader->Close();
@@ -150,17 +156,13 @@ namespace DataFormProject {
 
 			contactsDataGridView->DataSource = sqlDataTable;
 
-        }
-        catch (Exception^ ex) {
-            MessageBox::Show(ex->Message,L"Contact List", MessageBoxButtons::OK , MessageBoxIcon::Information);
-
-        }
-
+		}
+		catch (Exception^ ex) {
+			MessageBox::Show(ex->Message, L"Contact List", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		}
 	}
+		
+	
 
-	public: System::Void ContactListForm_ReloadDataGridView() {
-
-	}
-
-	};
+};
 }

@@ -307,8 +307,8 @@ namespace DataFormProject {
 		ClearAllFields();
 
 		this->Hide();
-		
 		form2->Show();
+
 
     }
     private: System::Void nextEntryButton_Click(System::Object^ sender, System::EventArgs^ e) {

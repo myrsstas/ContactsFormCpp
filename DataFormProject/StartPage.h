@@ -187,7 +187,7 @@ namespace DataFormProject {
 	private: System::Void startFromZeroButton_Click(System::Object^ sender, System::EventArgs^ e) {
 			//TODO: add connection to DB
 			//TODO: clear DB from previous data
-		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form";
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form; Convert Zero Datetime=True;";
 		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 		MySqlCommand^ command = gcnew MySqlCommand("truncate table contacts;", connectionDB);
 		try {
