@@ -9,6 +9,8 @@ namespace DataFormProject {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace MySql::Data::MySqlClient;
+	using namespace System::IO;
+
 
 	/// <summary>
 	/// Summary for ContactListForm
@@ -21,6 +23,9 @@ namespace DataFormProject {
 
 	public:
 		System::Windows::Forms::Form^ form3;
+
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form;";
+		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 
 		ContactListForm(void)
 		{
@@ -53,7 +58,7 @@ namespace DataFormProject {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -99,6 +104,7 @@ namespace DataFormProject {
 			this->exportDataButton->TabIndex = 2;
 			this->exportDataButton->Text = L"Export Data";
 			this->exportDataButton->UseVisualStyleBackColor = true;
+			this->exportDataButton->Click += gcnew System::EventHandler(this, &ContactListForm::exportDataButton_Click);
 			// 
 			// exitButton
 			// 
@@ -128,21 +134,20 @@ namespace DataFormProject {
 		}
 #pragma endregion
 
-    private: System::Void exitButton_Click(System::Object^ sender, System::EventArgs^ e) {
-        Application::Exit();
+	private: System::Void exitButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		Application::Exit();
 
-    }
+	}
 
-    private: System::Void addContactButton_Click(System::Object^ sender, System::EventArgs^ e) {
-        this->Hide();
-        form3->Show();
+	private: System::Void addContactButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->Hide();
+		form3->Show();
 
-    }
+	}
 
 
 	private: System::Void ContactListForm_VisibleChanged(System::Object^ sender, System::EventArgs^ e) {
-		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form;";
-		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
+
 		MySqlCommand^ sqlCommand = gcnew MySqlCommand("select * from contacts;", connectionDB);
 		MySqlDataReader^ dataReader;
 		DataTable^ sqlDataTable = gcnew DataTable();
@@ -161,8 +166,35 @@ namespace DataFormProject {
 			MessageBox::Show(ex->Message, L"Contact List", MessageBoxButtons::OK, MessageBoxIcon::Information);
 		}
 	}
-		
-	
+
+
+	private: System::Void exportDataButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		//String^ filename = "ExportedContacts.txt";
+		String^ txtPath = "C:\\Users\\myrsi\\Desktop\\ExportedContacts.txt";
+
+		StreamWriter^ outFile = gcnew StreamWriter(txtPath);
+
+		MySqlCommand^ sqlCommand = gcnew MySqlCommand("select * from contacts;", connectionDB);
+		connectionDB->Open();
+		MySqlDataReader^ dataReader = sqlCommand->ExecuteReader();
+		int  columnCount = dataReader->FieldCount;
+		String^ listOfColumns;
+		//String^  listOfColumns = String::Empty;
+		while (dataReader->Read())
+		{
+			for (int i = 0; i <= columnCount - 1; i++)
+			{
+				listOfColumns = listOfColumns + dataReader[i]->ToString() + ";";
+			}
+
+			listOfColumns = listOfColumns + System::Environment::NewLine;
+
+		}
+		outFile->WriteLine(listOfColumns);
+		outFile->Close();
+		dataReader->Close();
+		connectionDB->Close();
+	}
 
 };
 }

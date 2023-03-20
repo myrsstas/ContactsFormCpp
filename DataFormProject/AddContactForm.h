@@ -24,6 +24,9 @@ namespace DataFormProject {
 
 		System::Windows::Forms::Form^ form2;
 
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form";
+		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
+
 		AddContactForm(void)
 		{
 			InitializeComponent();
@@ -335,15 +338,9 @@ namespace DataFormProject {
 		cityTB->Text !="" ? city = cityTB->Text : city = "-";
 		notesTB->Text != "" ? notes = notesTB->Text :notes = "-";
 
-		//MessageBox::Show(name + " " + surname + " " + dateOfBirth + " " + phoneNumber + " " + email + " " + address + " " + city + " " + notes);
 		//MessageBox::Show(dateOfBirthTB->Text + "\n" + dateOfBirth + "\n" + today);
 
-
-		//TODO: sqlite connection
-		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form";
-        MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
-
-		try{
+		try {
          //TODO: apothikeysi olwn twn stoixeiwn stin basi
 			MySqlCommand^ sqlCommand = gcnew MySqlCommand("insert into contacts (name, surname, date_of_birth, phone_number, email, address, city, notes) " +
 				" values('"+ name +"' , '" + surname + "','" + dateOfBirth + "','" + phoneNumber + "','" + email + "','" + address + "','" + city + "','" + notes + "'); ", connectionDB);

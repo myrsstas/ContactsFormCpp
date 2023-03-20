@@ -21,6 +21,9 @@ namespace DataFormProject {
 
 		public: ContactListForm^ form2;
 		public: AddContactForm^ form3;
+		
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form;";
+		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 
 
 	public:
@@ -33,6 +36,7 @@ namespace DataFormProject {
 			form2->form1 = this;
 			form2->form3 = form3;
 			form3->form2 = form2;
+			
 
 			//
 			//TODO: Add the constructor code here
@@ -185,28 +189,30 @@ namespace DataFormProject {
 #pragma endregion
 
 	private: System::Void startFromZeroButton_Click(System::Object^ sender, System::EventArgs^ e) {
-			//TODO: add connection to DB
-			//TODO: clear DB from previous data
-		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form; Convert Zero Datetime=True;";
-		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
+		
+		//removeAllRecords();
+
+		//TODO: Close this form and open the next one
+		this->Hide();
+		form2->Show();
+
+			
+		}
+	private: System::Void removeAllRecords() {
+		//TODO: add connection to DB
+		//TODO: clear DB from previous data
+
 		MySqlCommand^ command = gcnew MySqlCommand("truncate table contacts;", connectionDB);
 		try {
 			connectionDB->Open();
 			command->ExecuteNonQuery();
 			connectionDB->Close();
 
-		} catch (Exception^ ex){
+		}
+		catch (Exception^ ex) {
 			MessageBox::Show(ex->Message, L"Start Page", MessageBoxButtons::OK, MessageBoxIcon::Information);
 
 		}
-
-		//TODO: Close this form and open the next one
-
-		this->Hide();
-		form2->Show();
-
-
-			
-		}
+	}
 	};
 }
