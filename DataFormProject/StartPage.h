@@ -139,6 +139,7 @@ namespace DataFormProject {
 			this->uploadButton->TabIndex = 3;
 			this->uploadButton->Text = L"Upload";
 			this->uploadButton->UseVisualStyleBackColor = true;
+			this->uploadButton->Click += gcnew System::EventHandler(this, &StartPage::uploadButton_Click);
 			// 
 			// browseButton
 			// 
@@ -214,5 +215,8 @@ namespace DataFormProject {
 
 		}
 	}
-	};
+	private: System::Void uploadButton_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	}
+};
 }

@@ -25,6 +25,8 @@ namespace DataFormProject {
 		System::Windows::Forms::Form^ form3;
 
 		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form;";
+	private: System::Windows::Forms::SaveFileDialog^ exportDataFileDialog;
+	public:
 		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 
 		ContactListForm(void)
@@ -71,6 +73,7 @@ namespace DataFormProject {
 			this->addContactButton = (gcnew System::Windows::Forms::Button());
 			this->exportDataButton = (gcnew System::Windows::Forms::Button());
 			this->exitButton = (gcnew System::Windows::Forms::Button());
+			this->exportDataFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->contactsDataGridView))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -115,6 +118,10 @@ namespace DataFormProject {
 			this->exitButton->Text = L"Exit";
 			this->exitButton->UseVisualStyleBackColor = true;
 			this->exitButton->Click += gcnew System::EventHandler(this, &ContactListForm::exitButton_Click);
+			// 
+			// exportDataFileDialog
+			// 
+			this->exportDataFileDialog->Filter = L"TexT|*.txt";
 			// 
 			// ContactListForm
 			// 
@@ -170,31 +177,49 @@ namespace DataFormProject {
 
 	private: System::Void exportDataButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		//String^ filename = "ExportedContacts.txt";
-		String^ txtPath = "C:\\Users\\myrsi\\Desktop\\ExportedContacts.txt";
+		
+		SaveFileDialog^ saveFile = gcnew SaveFileDialog();
+		try {
+			saveFile->Filter = "Text File|*.txt";
+			saveFile->FileName = "ExportedContacts.txt";
+			saveFile->Title = "Save Text File";
 
-		StreamWriter^ outFile = gcnew StreamWriter(txtPath);
+			if (saveFile->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 
-		MySqlCommand^ sqlCommand = gcnew MySqlCommand("select * from contacts;", connectionDB);
-		connectionDB->Open();
-		MySqlDataReader^ dataReader = sqlCommand->ExecuteReader();
-		int  columnCount = dataReader->FieldCount;
-		String^ listOfColumns;
-		//String^  listOfColumns = String::Empty;
-		while (dataReader->Read())
-		{
-			for (int i = 0; i <= columnCount - 1; i++)
-			{
-				listOfColumns = listOfColumns + dataReader[i]->ToString() + ";";
+				//String^ txtPath = "C:\\Users\\myrsi\\Desktop\\ExportedContacts.txt";
+				
+				String^ path = saveFile->FileName;
+
+				StreamWriter^ writer = gcnew StreamWriter(File::Create(path));
+
+				MySqlCommand^ sqlCommand = gcnew MySqlCommand("select * from contacts;", connectionDB);
+				connectionDB->Open();
+				MySqlDataReader^ dataReader = sqlCommand->ExecuteReader();
+				int  columnCount = dataReader->FieldCount;
+				String^ listOfColumns;
+				//String^  listOfColumns = String::Empty;
+				while (dataReader->Read())
+				{
+					for (int i = 0; i <= columnCount - 1; i++)
+					{
+						listOfColumns = listOfColumns + dataReader[i]->ToString() + ";";
+					}
+
+					listOfColumns = listOfColumns + System::Environment::NewLine;
+
+				}
+				writer->WriteLine(listOfColumns);
+				writer->Close();
+				dataReader->Close();
+				connectionDB->Close();
 			}
-
-			listOfColumns = listOfColumns + System::Environment::NewLine;
+		}
+		finally {
 
 		}
-		outFile->WriteLine(listOfColumns);
-		outFile->Close();
-		dataReader->Close();
-		connectionDB->Close();
+		
 	}
+
 
 };
 }
