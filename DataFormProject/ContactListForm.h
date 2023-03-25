@@ -25,7 +25,9 @@ namespace DataFormProject {
 		System::Windows::Forms::Form^ form3;
 
 		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form;";
+	
 	private: System::Windows::Forms::SaveFileDialog^ exportDataFileDialog;
+	
 	public:
 		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 
@@ -179,44 +181,42 @@ namespace DataFormProject {
 		//String^ filename = "ExportedContacts.txt";
 		
 		SaveFileDialog^ saveFile = gcnew SaveFileDialog();
-		try {
-			saveFile->Filter = "Text File|*.txt";
-			saveFile->FileName = "ExportedContacts.txt";
-			saveFile->Title = "Save Text File";
+		
+		saveFile->Filter = "Text File|*.txt";
+		saveFile->FileName = "ExportedContacts.txt";
+		saveFile->Title = "Save Text File";
 
-			if (saveFile->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		if (saveFile->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 
-				//String^ txtPath = "C:\\Users\\myrsi\\Desktop\\ExportedContacts.txt";
+			//String^ txtPath = "C:\\Users\\myrsi\\Desktop\\ExportedContacts.txt";
 				
-				String^ path = saveFile->FileName;
+			String^ path = saveFile->FileName;
 
-				StreamWriter^ writer = gcnew StreamWriter(File::Create(path));
+			StreamWriter^ writer = gcnew StreamWriter(File::Create(path));
 
-				MySqlCommand^ sqlCommand = gcnew MySqlCommand("select * from contacts;", connectionDB);
-				connectionDB->Open();
-				MySqlDataReader^ dataReader = sqlCommand->ExecuteReader();
-				int  columnCount = dataReader->FieldCount;
-				String^ listOfColumns;
-				//String^  listOfColumns = String::Empty;
-				while (dataReader->Read())
+			MySqlCommand^ sqlCommand = gcnew MySqlCommand("select * from contacts;", connectionDB);
+			connectionDB->Open();
+			MySqlDataReader^ dataReader = sqlCommand->ExecuteReader();
+			int  columnCount = dataReader->FieldCount;
+			String^ listOfColumns;
+
+			//String^  listOfColumns = String::Empty;
+
+			while (dataReader->Read())
+			{
+				for (int i = 0; i <= columnCount - 1; i++)
 				{
-					for (int i = 0; i <= columnCount - 1; i++)
-					{
-						listOfColumns = listOfColumns + dataReader[i]->ToString() + ";";
-					}
-
-					listOfColumns = listOfColumns + System::Environment::NewLine;
-
+					listOfColumns = listOfColumns + dataReader[i]->ToString() + ";";
 				}
-				writer->WriteLine(listOfColumns);
-				writer->Close();
-				dataReader->Close();
-				connectionDB->Close();
+				listOfColumns = listOfColumns + System::Environment::NewLine;
 			}
+			writer->WriteLine(listOfColumns);
+			writer->Close();
+			dataReader->Close();
+			connectionDB->Close();
+		
 		}
-		finally {
-
-		}
+	
 		
 	}
 
