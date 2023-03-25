@@ -238,7 +238,7 @@ namespace DataFormProject {
 		int count = 0;*/
 		String^ filepath = filepathTextBox->Text;
 
-		String^ destinationFile = "/tmp/contactsToImport.txt";
+		String^ destinationFile = "C:\\xampp\\tmpcontactsToImport.txt";
 
 		try
 		{
@@ -249,8 +249,11 @@ namespace DataFormProject {
 					File::SetAttributes(destinationFile, FileAttributes::Normal);
 
 				File::Delete(destinationFile);
-				File::Copy(filepath, destinationFile);
+				
 			}
+
+			File::Copy(filepath, destinationFile);
+
 		}
 		catch (IOException^)
 		{
@@ -266,8 +269,10 @@ namespace DataFormProject {
 		//	words = str->Split(seperate);
 		//	//Console::WriteLine("Number of Words : {0}", words->Length);
 		//	for (int word = 0; word < words->Length; word++) {
+
 				MySqlCommand^ command = gcnew MySqlCommand("truncate table contacts;" +
-					"LOAD DATA LOCAL INFILE '"+destinationFile+"' INTO TABLE `contacts` FIELDS TERMINATED BY ';' LINES TERMINATED BY '\r\n'", connectionDB);
+					"LOAD DATA LOCAL INFILE '"+destinationFile+"' INTO TABLE `contacts` FIELDS TERMINATED BY ';' LINES TERMINATED BY '\r\n';", connectionDB);
+
 				/*command->CommandTimeout = 86400;*/
 				
 				 /*command = gcnew MySqlCommand("insert into contacts(id, name, surname, date_of_birth, phone_number, email, address, city, notes) " +
