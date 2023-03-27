@@ -230,36 +230,13 @@ namespace DataFormProject {
 
 		String^ filepath = filepathTextBox->Text;
 
-		//String^ destinationFile = "C:\\xampp\\tmp\\contactsToImport.txt";
-
-		//try
-		//{
-		//	if (File::Exists(destinationFile))
-		//	{
-		//		//If file has read only attribute set clear it so that delete can occur
-		//		if ((File::GetAttributes(destinationFile) & FileAttributes::ReadOnly) == FileAttributes::ReadOnly)
-		//			File::SetAttributes(destinationFile, FileAttributes::Normal);
-
-		//		File::Delete(destinationFile);
-
-		//	}
-
-		//	File::Copy(filepath, destinationFile);
-
-		//}
-		//catch (IOException^)
-		//{
-		//	MessageBox::Show(L"This file is in use by another application - please close it first", L"Can't overwrite file", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
-		//}
-
-		
 		MySqlBulkLoader^ bl = gcnew MySqlBulkLoader(connectionDB);
 		bl->Local = true;
 		bl->TableName = "contacts";
 		bl->FieldTerminator = ";";
 		bl->LineTerminator = "\n";
 		bl->FileName = filepath;
-		//bl->NumberOfLinesToSkip = 1;
+		bl->NumberOfLinesToSkip = 1;
 
 		try
 		{

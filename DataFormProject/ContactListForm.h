@@ -26,7 +26,7 @@ namespace DataFormProject {
 
 		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form;";
 	
-	private: System::Windows::Forms::SaveFileDialog^ exportDataFileDialog;
+
 	
 	public:
 		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
@@ -75,7 +75,6 @@ namespace DataFormProject {
 			this->addContactButton = (gcnew System::Windows::Forms::Button());
 			this->exportDataButton = (gcnew System::Windows::Forms::Button());
 			this->exitButton = (gcnew System::Windows::Forms::Button());
-			this->exportDataFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->contactsDataGridView))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -120,10 +119,6 @@ namespace DataFormProject {
 			this->exitButton->Text = L"Exit";
 			this->exitButton->UseVisualStyleBackColor = true;
 			this->exitButton->Click += gcnew System::EventHandler(this, &ContactListForm::exitButton_Click);
-			// 
-			// exportDataFileDialog
-			// 
-			this->exportDataFileDialog->Filter = L"TexT|*.txt";
 			// 
 			// ContactListForm
 			// 

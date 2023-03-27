@@ -118,6 +118,7 @@ namespace DataFormProject {
 			this->nameTB->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->nameTB->Size = System::Drawing::Size(212, 20);
 			this->nameTB->TabIndex = 3;
+			this->nameTB->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &AddContactForm::nameTB_KeyPress);
 			this->nameTB->Leave += gcnew System::EventHandler(this, &AddContactForm::nameTB_Leave);
 			// 
 			// label2
@@ -135,6 +136,7 @@ namespace DataFormProject {
 			this->surnameTB->Name = L"surnameTB";
 			this->surnameTB->Size = System::Drawing::Size(212, 20);
 			this->surnameTB->TabIndex = 5;
+			this->surnameTB->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &AddContactForm::nameTB_KeyPress);
 			this->surnameTB->Leave += gcnew System::EventHandler(this, &AddContactForm::surnameTB_Leave);
 			// 
 			// label3
@@ -359,7 +361,7 @@ namespace DataFormProject {
     }
     private: System::Void nameTB_Leave(System::Object^ sender, System::EventArgs^ e) {
 
-        nameTB->Text = nameTB->Text->ToUpper();
+	        nameTB->Text = nameTB->Text->ToUpper();
 
     }
     private: System::Void surnameTB_Leave(System::Object^ sender, System::EventArgs^ e) {
@@ -431,6 +433,16 @@ namespace DataFormProject {
 		notesTB->Text = "";
 	}
 
+
+	private: System::Void nameTB_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		if ((e->KeyChar != 8 && e->KeyChar != 32) && !Char::IsDigit(e->KeyChar)) {
+			if (!Char::IsLetter(e->KeyChar))
+			{
+				e->Handled = true;
+			}
+		}
+
+	}
 
 };
 }
