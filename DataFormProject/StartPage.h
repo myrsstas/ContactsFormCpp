@@ -22,7 +22,7 @@ namespace DataFormProject {
 		public: ContactListForm^ form2;
 		public: AddContactForm^ form3;
 		
-		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form; AllowLoadLocalInfile=true;";
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form; AllowLoadLocalInfile=true; ";
 		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 		
 
@@ -199,15 +199,15 @@ namespace DataFormProject {
 
 	private: System::Void letsStartButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		
-		//removeAllRecords();
+		removeAllRecords();
 
 		//TODO: Close this form and open the next one
 		this->Hide();
 		form2->Show();
-
 			
 		}
 	private: System::Void removeAllRecords() {
+
 		//TODO: add connection to DB
 		//TODO: clear DB from previous data
 
@@ -224,92 +224,58 @@ namespace DataFormProject {
 		}
 	}
 	private: System::Void uploadButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		
 
-		//String^ readFile = File::ReadAllText(filepathTextBox->Text);		
-		//array<String^>^ dataToImport = gcnew array<String^>^ {File::ReadLines(filepathTextBox->Text)::Select};
-		
-	/*	StreamReader^ din = File::OpenText(filepathTextBox->Text);
+		removeAllRecords();
 
-		String^ seperatorOfStrings = ";";
-		array<Char>^ seperate = seperatorOfStrings->ToCharArray();
 
-		String^ str;
-		int count = 0;*/
 		String^ filepath = filepathTextBox->Text;
 
-		String^ destinationFile = "C:\\xampp\\tmpcontactsToImport.txt";
+		//String^ destinationFile = "C:\\xampp\\tmp\\contactsToImport.txt";
+
+		//try
+		//{
+		//	if (File::Exists(destinationFile))
+		//	{
+		//		//If file has read only attribute set clear it so that delete can occur
+		//		if ((File::GetAttributes(destinationFile) & FileAttributes::ReadOnly) == FileAttributes::ReadOnly)
+		//			File::SetAttributes(destinationFile, FileAttributes::Normal);
+
+		//		File::Delete(destinationFile);
+
+		//	}
+
+		//	File::Copy(filepath, destinationFile);
+
+		//}
+		//catch (IOException^)
+		//{
+		//	MessageBox::Show(L"This file is in use by another application - please close it first", L"Can't overwrite file", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
+		//}
+
+		
+		MySqlBulkLoader^ bl = gcnew MySqlBulkLoader(connectionDB);
+		bl->Local = true;
+		bl->TableName = "contacts";
+		bl->FieldTerminator = ";";
+		bl->LineTerminator = "\n";
+		bl->FileName = filepath;
+		//bl->NumberOfLinesToSkip = 1;
 
 		try
 		{
-			if (File::Exists(destinationFile))
-			{
-				//If file has read only attribute set clear it so that delete can occur
-				if ((File::GetAttributes(destinationFile) & FileAttributes::ReadOnly) == FileAttributes::ReadOnly)
-					File::SetAttributes(destinationFile, FileAttributes::Normal);
-
-				File::Delete(destinationFile);
-				
-			}
-
-			File::Copy(filepath, destinationFile);
-
-		}
-		catch (IOException^)
-		{
-			MessageBox::Show(L"This file is in use by another application - please close it first", L"Can't overwrite file", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
-		}
-
-		connectionDB->Open();
-		//while ((str = din->ReadLine()) != nullptr)
-		//{
-		//	count++;
-
-		//	array<String^>^ words;
-		//	words = str->Split(seperate);
-		//	//Console::WriteLine("Number of Words : {0}", words->Length);
-		//	for (int word = 0; word < words->Length; word++) {
-
-				MySqlCommand^ command = gcnew MySqlCommand("truncate table contacts;" +
-					"LOAD DATA LOCAL INFILE '"+destinationFile+"' INTO TABLE `contacts` FIELDS TERMINATED BY ';' LINES TERMINATED BY '\r\n';", connectionDB);
-
-				/*command->CommandTimeout = 86400;*/
-				
-				 /*command = gcnew MySqlCommand("insert into contacts(id, name, surname, date_of_birth, phone_number, email, address, city, notes) " +
-					" values('" + words[0] + "' , '" + words[1] + "' , '" + words[2] + "','" + words[3] + "','" + words[4] + "','" + words[5] + "','" + words[6] + "','" + words[7] + "','" + words[8] + "'); ", connectionDB);*/
-				try {
-					
-					command->ExecuteNonQuery();
-
-				}
-				catch (Exception^ ex) {
-					MessageBox::Show(ex->Message, L"Start Page", MessageBoxButtons::OK, MessageBoxIcon::Information);
-
-				}
-		//	}
-		connectionDB->Close();
-				//Console::WriteLine("{0}", words[word]);
-
-			
-		//}
-	
-		
-
-		/*MySqlCommand^ command = gcnew MySqlCommand("insert into contacts(name, surname, date_of_birth, phone_number, email, address, city, notes) " +
-			" values('" + name + "' , '" + surname + "','" + dateOfBirth + "','" + phoneNumber + "','" + email + "','" + address + "','" + city + "','" + notes + "'); ", connectionDB);
-		try {
 			connectionDB->Open();
-			command->ExecuteNonQuery();
-			connectionDB->Close();
+			bl->Load();
 
+			connectionDB->Close();
 		}
-		catch (Exception^ ex) {
+		catch (Exception^ ex)
+		{
 			MessageBox::Show(ex->Message, L"Start Page", MessageBoxButtons::OK, MessageBoxIcon::Information);
 
-		}*/
+		}
 
-
-		//MessageBox::Show(readFile);
+		this->Hide();
+		form2->Show();
 
 	}
 
