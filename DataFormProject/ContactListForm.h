@@ -25,7 +25,11 @@ namespace DataFormProject {
 		System::Windows::Forms::Form^ form3;
 
 		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form;";
-	
+
+	public:
+
+	public:
+
 
 	
 	public:
@@ -57,6 +61,7 @@ namespace DataFormProject {
 	private: System::Windows::Forms::Button^ addContactButton;
 	private: System::Windows::Forms::Button^ exportDataButton;
 	private: System::Windows::Forms::Button^ exitButton;
+
 
 	private:
 		/// <summary>
@@ -124,7 +129,7 @@ namespace DataFormProject {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(630, 487);
+			this->ClientSize = System::Drawing::Size(634, 491);
 			this->Controls->Add(this->exitButton);
 			this->Controls->Add(this->exportDataButton);
 			this->Controls->Add(this->addContactButton);

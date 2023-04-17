@@ -129,7 +129,7 @@ namespace DataFormProject {
 			// startLabel
 			// 
 			this->startLabel->AutoSize = true;
-			this->startLabel->Location = System::Drawing::Point(92, 53);
+			this->startLabel->Location = System::Drawing::Point(112, 50);
 			this->startLabel->Name = L"startLabel";
 			this->startLabel->Size = System::Drawing::Size(193, 13);
 			this->startLabel->TabIndex = 0;
@@ -236,7 +236,7 @@ namespace DataFormProject {
 		bl->FieldTerminator = ";";
 		bl->LineTerminator = "\n";
 		bl->FileName = filepath;
-		bl->NumberOfLinesToSkip = 1;
+		bl->NumberOfLinesToSkip = 0;
 
 		try
 		{
