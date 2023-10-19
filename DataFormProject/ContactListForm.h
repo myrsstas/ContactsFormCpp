@@ -24,7 +24,7 @@ namespace DataFormProject {
 	public:
 		System::Windows::Forms::Form^ form3;
 
-		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form;";
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form; SslMode=none;";
 
 	public:
 
@@ -33,6 +33,7 @@ namespace DataFormProject {
 
 	
 	public:
+		
 		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 
 		ContactListForm(void)

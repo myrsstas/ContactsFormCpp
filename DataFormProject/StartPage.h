@@ -22,7 +22,7 @@ namespace DataFormProject {
 		public: ContactListForm^ form2;
 		public: AddContactForm^ form3;
 		
-		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form; AllowLoadLocalInfile=true; ";
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form; AllowLoadLocalInfile=true; SslMode=none";
 		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 		
 
