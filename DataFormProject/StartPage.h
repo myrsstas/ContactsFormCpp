@@ -1,3 +1,4 @@
+//Application development in popular integrated development environments © 2023 by Myrsini Stasinou is licensed under CC-BY-4.0 
 #pragma once
 #include "ContactListForm.h"
 #include "AddContactForm.h"
@@ -22,7 +23,7 @@ namespace DataFormProject {
 		public: ContactListForm^ form2;
 		public: AddContactForm^ form3;
 		
-		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form; AllowLoadLocalInfile=true; SslMode=none";
+		String^ connectionString = L"datasource=localhost; port=3306; uid=root; database=contacts_form; SslMode=none";
 		MySqlConnection^ connectionDB = gcnew MySqlConnection(connectionString);
 		
 
